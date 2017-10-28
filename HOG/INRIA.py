@@ -8,7 +8,7 @@ def INRIA_pos_coordinate(filename):
     if str(".txt") not in filename:
         return 0;
 
-    print "Processing:", filename
+    # print "Processing:", filename
 
     f = open(filename, "r")
 
@@ -43,28 +43,62 @@ def INRIA_pos_coordinate(filename):
 
 def INRIA_pos_img(pos_image_path, annotation_path):
     img_list = os.listdir(annotation_path)
-
-    for imgfilename in img_list[0:2]:
+    firstIn = True
+    for imgfilename in img_list:
         annotation_name = annotation_path + '/' + imgfilename
         image_name = (pos_image_path + '/' + imgfilename).replace(".txt", "") + ".png"
         img = cv2.imread(image_name)
         coordinates, nums = INRIA_pos_coordinate(annotation_name)
-        print coordinates
+        # print coordinates
         for index in range(nums):
             imgCut = img[coordinates[index][1]:coordinates[index][3], coordinates[index][0]:coordinates[index][2]]
             imgResize = cv2.resize(imgCut,(160,96), cv2.INTER_CUBIC)
-            print imgResize.
+            imgResize = imgResize[np.newaxis, :]
+            if firstIn == True:
+                imgSave = imgResize
+                firstIn = False
+            else:
+                imgSave = np.vstack((imgSave, imgResize))
+
+    return imgSave
+
+def INRIA_neg_img(neg_image_path):
+    img_list = os.listdir(neg_image_path)
+    firstIn = True
+    for imgfilename in img_list:
+
+        image_name = neg_image_path + '/' + imgfilename
+        img = cv2.imread(image_name)
+        imgResize = cv2.resize(img, (160, 96), cv2.INTER_CUBIC)
+        imgResize = imgResize[np.newaxis, :]
+        if firstIn == True:
+            imgSave = imgResize
+            firstIn = False
+        else:
+            imgSave = np.vstack((imgSave, imgResize))
+
+    return imgSave
 
 
+def INRIA_pos_labels(nums):
+    return np.ones((nums,), dtype=np.int)
 
-
+def INRIA_neg_labels(nums):
+    return np.zeros((nums,), dtype=np.int)
 
 # def INRIA_neg_img(neg_image_path):
 
 
 if __name__ == '__main__':
-    pos_image_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/pos"
-    neg_image_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/neg"
-    annotation_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/annotations"
+    # pos_image_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/pos"
+    # neg_image_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/neg"
+    # annotation_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/annotations"
+
+    pos_image_path = "/home/jwwangchn/data/INRIAPerson/Train/pos"
+    neg_image_path = "/home/jwwangchn/data/INRIAPerson/Train/neg"
+    annotation_path = "/home/jwwangchn/data/INRIAPerson/Train/annotations"
+
     # print INRIA_pos_coordinate(annotation_path)
-    INRIA_pos_img(pos_image_path, annotation_path)
+    # print INRIA_pos_img(pos_image_path, annotation_path).shape
+    # print INRIA_pos_labels(10)
+    # print INRIA_neg_img(neg_image_path).shape
