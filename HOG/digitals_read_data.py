@@ -36,3 +36,5 @@ def deskew(img):
     M = np.float32([[1, skew, -0.5 * SZ * skew], [0, 1, 0]])
     img = cv2.warpAffine(img, M, (SZ, SZ), flags=cv2.WARP_INVERSE_MAP | cv2.INTER_LINEAR)
     return img
+
+
