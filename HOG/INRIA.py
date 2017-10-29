@@ -3,6 +3,7 @@ import os
 import re
 import cv2
 import numpy as np
+from scipy import io
 
 def INRIA_pos_coordinate(filename):
     if str(".txt") not in filename:
@@ -81,24 +82,40 @@ def INRIA_neg_img(neg_image_path):
 
 
 def INRIA_pos_labels(nums):
-    return np.ones((nums,), dtype=np.int)
+    return np.ones((nums), dtype=np.int)
 
 def INRIA_neg_labels(nums):
-    return np.zeros((nums,), dtype=np.int)
+    return np.zeros((nums), dtype=np.int)
 
 # def INRIA_neg_img(neg_image_path):
 
 
 if __name__ == '__main__':
-    # pos_image_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/pos"
-    # neg_image_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/neg"
-    # annotation_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/annotations"
+    pos_image_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/pos"
+    neg_image_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/neg"
+    annotation_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/annotations"
 
-    pos_image_path = "/home/jwwangchn/data/INRIAPerson/Train/pos"
-    neg_image_path = "/home/jwwangchn/data/INRIAPerson/Train/neg"
-    annotation_path = "/home/jwwangchn/data/INRIAPerson/Train/annotations"
+    # pos_image_path = "/home/jwwangchn/data/INRIAPerson/Train/pos"
+    # neg_image_path = "/home/jwwangchn/data/INRIAPerson/Train/neg"
+    # annotation_path = "/home/jwwangchn/data/INRIAPerson/Train/annotations"
 
-    # print INRIA_pos_coordinate(annotation_path)
-    # print INRIA_pos_img(pos_image_path, annotation_path).shape
-    # print INRIA_pos_labels(10)
-    # print INRIA_neg_img(neg_image_path).shape
+    # annotation =  INRIA_pos_coordinate(annotation_path)
+    pos = INRIA_pos_img(pos_image_path, annotation_path)
+    neg = INRIA_neg_img(neg_image_path)
+
+    pos_length = int(pos.shape[0])
+    neg_length = int(neg.shape[0])
+
+    pos_labels = INRIA_pos_labels(pos_length)
+    neg_labels = INRIA_neg_labels(neg_length)
+    print pos_labels
+    print pos_length
+
+    data = np.vstack((pos, neg))
+    labels = np.append(pos_labels,neg_labels)
+    print labels
+    print labels.shape
+    print data.shape
+    mat_file = {'data':data, 'labels': labels}
+    io.savemat('INRIA.mat', mat_file)
+

@@ -60,7 +60,6 @@ class SVM(StatModel):
     def predict(self, samples):
         return self.model.predict(samples)[1].ravel()
 
-
 def evaluate_model(model, digits, samples, labels):
     resp = model.predict(samples)
     err = (labels != resp).mean()
@@ -113,6 +112,10 @@ if __name__ == '__main__':
     # Load data. 导入手写字体数据集
     digits, labels = load_digits('../image/digits.png')
 
+    print digits.shape, labels.shape
+
+    print labels
+
     print('Shuffle data ... ')
     # Shuffle data 打乱数据的顺序, 打乱前, 数据是有序排列的
     rand = np.random.RandomState(10)
@@ -122,10 +125,9 @@ if __name__ == '__main__':
     print('Deskew images ... ')
     # 抗扭斜变换
     digits_deskewed = list(map(deskew, digits))
-
     print('Defining HoG parameters ...')
     # HoG feature descriptor
-    hog = get_hog();
+    hog = get_hog()
 
     print('Calculating HoG descriptor for every image ... ')
     hog_descriptors = []
@@ -136,6 +138,7 @@ if __name__ == '__main__':
     print('Spliting data into training (90%) and test set (10%)... ')
     # 生成训练集和测试集
     train_n = int(0.9 * len(hog_descriptors))
+
     digits_train, digits_test = np.split(digits_deskewed, [train_n])
     hog_descriptors_train, hog_descriptors_test = np.split(hog_descriptors, [train_n])
     labels_train, labels_test = np.split(labels, [train_n])
@@ -148,7 +151,12 @@ if __name__ == '__main__':
     model.save('digits_svm.dat')
 
     print('Evaluating model ... ')
+
+    resp = model.predict(hog_descriptors_test[0:0])
+    print resp
+
     vis = evaluate_model(model, digits_test, hog_descriptors_test, labels_test)
     cv2.imwrite("digits-classification.jpg", vis)
     cv2.imshow("Vis", vis)
     cv2.waitKey(0)
+    cv2.destroyAllWindows()
