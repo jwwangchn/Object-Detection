@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+*.mat
+*.dat
+
 .idea/
 
 # Distribution / packaging
