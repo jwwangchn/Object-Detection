@@ -48,8 +48,9 @@ def Pedestrians_MIT_neg_labels(nums):
 if __name__ == '__main__':
     pos_image_path = "H:/data/Pedestrains-MIT/pedestrians128x64"
     neg_image_path = "H:/data/INRIA Person Dataset/INRIAPerson/Train/neg"
-
+    print "Generating pos Samples"
     pos = Pedestrians_MIT_pos_img(pos_image_path)
+    print "Generating neg Samples"
     neg = Pedestrians_MIT_neg_img(neg_image_path)
 
     pos_length = int(pos.shape[0])

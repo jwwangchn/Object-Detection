@@ -127,7 +127,7 @@ if __name__ == '__main__':
     print('Evaluating model ... ')
 
     # 评估模型
-    vis = evaluate_model(model, data_train, hog_descriptors_train, labels_train)
+    # vis = evaluate_model(model, data_train, hog_descriptors_train, labels_train)
     vis = evaluate_model(model, data_test, hog_descriptors_test, labels_test)
     cv2.imwrite("digits-classification.jpg", vis)
     cv2.imshow("Vis", vis)

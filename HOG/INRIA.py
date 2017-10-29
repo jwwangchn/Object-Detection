@@ -100,7 +100,10 @@ if __name__ == '__main__':
     # annotation_path = "/home/jwwangchn/data/INRIAPerson/Train/annotations"
 
     # annotation =  INRIA_pos_coordinate(annotation_path)
+    print "Generating pos Samples"
     pos = INRIA_pos_img(pos_image_path, annotation_path)
+    print "Generating neg Samples"
+
     neg = INRIA_neg_img(neg_image_path)
 
     pos_length = int(pos.shape[0])
@@ -108,14 +111,10 @@ if __name__ == '__main__':
 
     pos_labels = INRIA_pos_labels(pos_length)
     neg_labels = INRIA_neg_labels(neg_length)
-    print pos_labels
-    print pos_length
 
     data = np.vstack((pos, neg))
     labels = np.append(pos_labels,neg_labels)
-    print labels
-    print labels.shape
-    print data.shape
+
     mat_file = {'data':data, 'labels': labels}
     io.savemat('INRIA.mat', mat_file)
 
